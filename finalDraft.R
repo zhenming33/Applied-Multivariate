@@ -64,8 +64,11 @@ write.csv(cdata, "imputed_dat.csv")
 ####### A. FACTOR ANALYSIS
 
 #1. a) choose rotation (rotate = ), extraction method (fm = ), and method to calculate factor scores (scores = )
-# 
-# chose method = "pa". Most common. According to help file, "true" minimal resid is probably found using
+
+# chose method = "pa". Most common. According to help file, "true" minimal resid is probably found using 
+# ran FA with both orthogonal and then a oblique rotation and compared the output results. Oblique roation explained a more
+# of the variance than orthogonal. However the difference was very small and since the orthogonal rotation is to be carried 
+# over to the cluster analysis, we decided to do a orthogonal rotation. 
 efa_var <- fa(cdata[,4:31], nfactors = 3, rotate = "varimax", scores = T, fm = "pa")# factor analysis with n selected factors
 efa_pro <- fa(cdata[,4:31], nfactors = 3, rotate = "promax", scores = T, fm = "pa") #
 
@@ -78,20 +81,23 @@ fa.parallel(cdata[,4:31], fa = "fa", n.iter = 100, show.legend = FALSE) # shows 
 
 #3. decide how to deal with complex items
 colnum <- c(22, 8, 18 , 11, 9, 25, 13, 23, 5, 14, 7) # vector with all of the complex items from the intial FA with "varimax"
+sdata <- cdata[,-c(1,2,3)] # data with just the question columns
 # all possible subsets
+# don't know which to remove or in what order so want to test with all subsets
 subs <- powerset(colnum) # creates a list of all the possible subsets
 
-# does a factor 
+# does a factor analysis with each possible combination of the complex items removed and stores each resulting RMSE in a vector
 for (i in 1:length(subs)) {
   delcol <- subs[[i]]
-  splits <- fa(sdata[,-delcol], nfactors = 3, rotate = "varimax", scores = T, fm = "pa")# factor analysis with n selected factors
+  splits <- fa(sdata[,-delcol], nfactors = 3, rotate = "varimax", scores = T, fm = "pa")
   rmse[i] <- splits$RMSEA[1] 
   print(i)
 }
 
-which.min(rmse)
-our_sub <- as.vector(subs[1272])
-our_sub
+which.min(rmse) # returns the index for the min RMSE in the vector
+our_sub <- as.vector(subs[1272]) # uses the index from above to find the complex item subset 
+our_sub # the column numbers of the complex items that if removed, produce the best FA. These need to be removed in this order.
+         
 
 #FA without complex items 
 efa_splits <- fa(sdata[, -c(11,9,25,13,23,7)], nfactors = 3, rotate = "varimax", scores = T, fm = "pa")
