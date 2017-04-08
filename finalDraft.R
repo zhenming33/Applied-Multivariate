@@ -8,9 +8,6 @@ library(psych)
 library(GPArotation)
 library(HapEstXXR)
 
-# This is a test to see how to edit a file
-# This is a test to edit within a branch
-
 ####################### DATA CLEANING #############################
 
 ddata <- read.csv("road.csv")
@@ -62,17 +59,16 @@ write.csv(cdata, "imputed_dat")
 
 ########################### ANALYSIS ################################################
 
-
-
-#1. Chose number of factors
-fa.parallel(cdata[,4:31], fa = "fa", n.iter = 100, show.legend = FALSE) # shows number of factors to use
-
-
-#2. choose rotation and extraction method 
+#1. choose rotation and extraction method 
 # 
 # chose method = "pa". Most common. According to help file, "true" minimal resid is probably found using
 efa_var <- fa(cdata[,4:31], nfactors = 3, rotate = "varimax", scores = T, fm = "pa")# factor analysis with n selected factors
 efa_pro <- fa(cdata[,4:31], nfactors = 3, rotate = "promax", scores = T, fm = "pa")
+
+
+#2. Chose number of factors (-> Liangliang code)
+fa.parallel(cdata[,4:31], fa = "fa", n.iter = 100, show.legend = FALSE) # shows number of factors to use
+
 
 
 #3. decide how to deal with complex items
@@ -99,4 +95,4 @@ loadings(efa_splits)
 factor.plot(efa, labels = rownames(efa_splits$loadings)) #??
 fa.diagram(efa_splits) # shows contents of each factor
 
-# Defining factors as indices or scales using coef. alpha
+# Defining factors as indices or scales using Crohnbach's alpha (-> Zhenming)
