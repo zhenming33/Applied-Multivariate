@@ -8,6 +8,8 @@ library(psych)
 library(GPArotation)
 library(HapEstXXR)
 
+# This is a test to see how to edit a file
+
 ####################### DATA CLEANING #############################
 
 ddata <- read.csv("road.csv")
