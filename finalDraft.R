@@ -7,6 +7,7 @@ library(mlr)
 library(psych)
 library(GPArotation)
 library(HapEstXXR)
+# TODO: Check that we're actually using each library
 
 ####################### DATA CLEANING #############################
 
@@ -52,21 +53,24 @@ cdata <- cbind(im.out.2$ximp)
 stopCluster(cl)
 sum(is.na(cdata))
 
-write.csv(cdata, "imputed_dat") 
+write.csv(cdata, "imputed_dat.csv") 
 
 
 
 
 ########################### ANALYSIS ################################################
 
-#1. choose rotation and extraction method 
+####### A. FACTOR ANALYSIS
+
+#1. a) choose rotation (rotate = ), extraction method (fm = ), and method to calculate factor scores (scores = )
 # 
 # chose method = "pa". Most common. According to help file, "true" minimal resid is probably found using
 efa_var <- fa(cdata[,4:31], nfactors = 3, rotate = "varimax", scores = T, fm = "pa")# factor analysis with n selected factors
 efa_pro <- fa(cdata[,4:31], nfactors = 3, rotate = "promax", scores = T, fm = "pa")
 
 
-#2. Chose number of factors (-> Liangliang code)
+
+#2. Choose number of factors (-> Liangliang code)
 fa.parallel(cdata[,4:31], fa = "fa", n.iter = 100, show.legend = FALSE) # shows number of factors to use
 
 
@@ -95,4 +99,29 @@ loadings(efa_splits)
 factor.plot(efa, labels = rownames(efa_splits$loadings)) #??
 fa.diagram(efa_splits) # shows contents of each factor
 
-# Defining factors as indices or scales using Crohnbach's alpha (-> Zhenming)
+
+# 4) Defining factors as indices or scales using Crohnbach's alpha (-> Zhenming)
+
+
+
+
+
+# 5) Find names for factors
+
+
+# 6) Make pretty plots
+
+
+### B. CLUSTER ANALYSIS
+
+# 1) Choose method (2 step, hierarchical, k-means,...)
+
+# 2) Choose number of clusters
+
+# 3) Bing in external variables (gender/age/experience)
+
+# 4) Pretty plots
+
+
+
+
