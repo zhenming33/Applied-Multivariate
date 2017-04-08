@@ -9,6 +9,7 @@ library(GPArotation)
 library(HapEstXXR)
 
 # This is a test to see how to edit a file
+# This is a test to edit within a branch
 
 ####################### DATA CLEANING #############################
 
