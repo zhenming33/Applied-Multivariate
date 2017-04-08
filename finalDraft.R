@@ -39,6 +39,7 @@ str(data2)
 # create a complete dataset to compare imputed dataset to 
 comp <- data2[-which(rowSums(is.na(data2)) > 0),]
 #imput missing values
+set.seed(397)
 cl <- makeCluster(2)
 registerDoParallel(cl)
 im.out.2 <- missForest(xmis = data2, maxiter = 10, ntree = 500,
@@ -66,7 +67,7 @@ write.csv(cdata, "imputed_dat.csv")
 # 
 # chose method = "pa". Most common. According to help file, "true" minimal resid is probably found using
 efa_var <- fa(cdata[,4:31], nfactors = 3, rotate = "varimax", scores = T, fm = "pa")# factor analysis with n selected factors
-efa_pro <- fa(cdata[,4:31], nfactors = 3, rotate = "promax", scores = T, fm = "pa")
+efa_pro <- fa(cdata[,4:31], nfactors = 3, rotate = "promax", scores = T, fm = "pa") #
 
 
 
@@ -76,10 +77,11 @@ fa.parallel(cdata[,4:31], fa = "fa", n.iter = 100, show.legend = FALSE) # shows 
 
 
 #3. decide how to deal with complex items
-
+colnum <- c(22, 8, 18 , 11, 9, 25, 13, 23, 5, 14, 7) # vector with all of the complex items from the intial FA with "varimax"
 # all possible subsets
-subs <- powerset(colnum)
+subs <- powerset(colnum) # creates a list of all the possible subsets
 
+# does a factor 
 for (i in 1:length(subs)) {
   delcol <- subs[[i]]
   splits <- fa(sdata[,-delcol], nfactors = 3, rotate = "varimax", scores = T, fm = "pa")# factor analysis with n selected factors
